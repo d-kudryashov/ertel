@@ -5,14 +5,14 @@ import java.util.List;
 public class CakeView {
 
     private List<CakeDto> items;
-    private Integer total;
+    private Long total;
 
     public CakeView() {
     }
 
-    public CakeView(List<CakeDto> items) {
-        setItems(items);
-
+    public CakeView(List<CakeDto> items, Long total) {
+        this.items = items;
+        this.total = total;
     }
 
     public List<CakeDto> getItems() {
@@ -21,10 +21,13 @@ public class CakeView {
 
     public void setItems(List<CakeDto> items) {
         this.items = items;
-        total = items.size();
     }
 
-    public Integer getTotal() {
+    public Long getTotal() {
         return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
     }
 }

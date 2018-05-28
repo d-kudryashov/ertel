@@ -2,10 +2,11 @@ package erteltest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "cakes")
-public class Cake {
+public class Cake implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
