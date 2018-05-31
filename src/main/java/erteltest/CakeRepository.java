@@ -20,6 +20,6 @@ public interface CakeRepository extends JpaRepository<Cake, Long> {
 
     @Async
     @Query("select count(c) from Cake c")
-    CompletableFuture<Long> getTotal(String name, StatusType[] statusTypes, Pageable pageable);
+    CompletableFuture<Long> getTotal(String name, StatusType[] statusTypes);
 
 }

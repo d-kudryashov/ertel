@@ -26,24 +26,28 @@ public class DefaultCakeService implements CakeService {
         PageRequest pageRequest = new PageRequest(filter.getPage(), filter.getLimit());
         return cakeRepository.findByNameAndStatusTypeIn(filter.getText(), filter.getStatuses(), pageRequest)
                 .thenApplyAsync(CakeConverter::cakeToCakeDTO)
-                .thenCombine(CompletableFuture.supplyAsync(
-                        () -> cakeRepository.getTotal(filter.getText(), filter.getStatuses(), pageRequest)).join(),
+                .thenCombineAsync(CompletableFuture.supplyAsync(
+                        () -> cakeRepository.getTotal(filter.getText(), filter.getStatuses())).join(),
                         CakeView::new);
     }
 
     @Override
     public CompletableFuture<Void> saveItem(Cake item) {
-        return null;
+        return CompletableFuture
+                .supplyAsync(() -> item)
+                .thenAccept(cakeRepository::save);
     }
 
     @Override
     public CompletableFuture<Void> removeItem(Long id) {
-        return null;
+        return CompletableFuture
+                .supplyAsync(() -> id)
+                .thenAccept(cakeRepository::delete);
     }
 
     @Override
     public CompletableFuture<Long> getTotal(CakeFilter filter) {
-        return cakeRepository.getTotal(filter.getText(), filter.getStatuses(), new PageRequest(filter.getPage(), filter.getLimit()));
+        return cakeRepository.getTotal(filter.getText(), filter.getStatuses());
     }
 
 }
