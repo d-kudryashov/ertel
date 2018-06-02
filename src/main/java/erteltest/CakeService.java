@@ -14,4 +14,6 @@ public interface CakeService {
 
     CompletableFuture<Long> getTotal(CakeFilter filter);
 
+    CompletableFuture<Boolean> ifExists(Long id);
+
 }

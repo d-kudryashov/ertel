@@ -35,7 +35,12 @@ public class DefaultCakeService implements CakeService {
     public CompletableFuture<Void> saveItem(Cake item) {
         return CompletableFuture
                 .supplyAsync(() -> item)
-                .thenAccept(cakeRepository::save);
+                .thenApplyAsync(cakeRepository::save)
+                .thenAccept(cake -> {
+                    if (cake == null) {
+                        throw new InternalException();
+                    }
+                });
     }
 
     @Override
@@ -50,4 +55,9 @@ public class DefaultCakeService implements CakeService {
         return cakeRepository.getTotal(filter.getText(), filter.getStatuses());
     }
 
+    @Override
+    public CompletableFuture<Boolean> ifExists(Long id) {
+        return CompletableFuture
+                .supplyAsync(() -> cakeRepository.exists(id));
+    }
 }

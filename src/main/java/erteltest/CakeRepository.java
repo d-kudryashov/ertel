@@ -3,6 +3,7 @@ package erteltest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,7 @@ public interface CakeRepository extends JpaRepository<Cake, Long> {
     CompletableFuture<List<Cake>> findByNameAndStatusTypeIn(String name, StatusType[] statusTypes, Pageable pageable);
 
     @Async
-    @Query("select count(c) from Cake c")
-    CompletableFuture<Long> getTotal(String name, StatusType[] statusTypes);
+    @Query("select count(c) from Cake c where c.name = :name and c.statusType in :statusTypes")
+    CompletableFuture<Long> getTotal(@Param("name") String name, @Param("statusTypes") StatusType[] statusTypes);
 
 }
