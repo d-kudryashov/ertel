@@ -1,5 +1,7 @@
-package erteltest;
+package erteltest.repositories;
 
+import erteltest.models.StatusType;
+import erteltest.models.Cake;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public interface CakeRepository extends JpaRepository<Cake, Long> {
 
     @Async
-    CompletableFuture<Cake> findById(Long id);
+    CompletableFuture<Cake> findCakeById(Long id);
 
     @Async
     CompletableFuture<List<Cake>> findByNameAndStatusTypeIn(String name, StatusType[] statusTypes, Pageable pageable);

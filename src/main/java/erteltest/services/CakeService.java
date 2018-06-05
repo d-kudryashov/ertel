@@ -1,4 +1,9 @@
-package erteltest;
+package erteltest.services;
+
+import erteltest.models.Cake;
+import erteltest.models.CakeDto;
+import erteltest.models.CakeFilter;
+import erteltest.models.CakeView;
 
 import java.util.concurrent.CompletableFuture;
 

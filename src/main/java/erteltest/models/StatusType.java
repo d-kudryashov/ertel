@@ -1,4 +1,4 @@
-package erteltest;
+package erteltest.models;
 
 public enum StatusType {
     FRESH("Свежий"),

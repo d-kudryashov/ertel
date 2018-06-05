@@ -1,4 +1,4 @@
-package erteltest;
+package erteltest.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

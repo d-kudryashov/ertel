@@ -1,4 +1,4 @@
-package erteltest;
+package erteltest.models;
 
 import java.util.List;
 

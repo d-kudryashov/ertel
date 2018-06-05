@@ -1,7 +1,14 @@
-package erteltest;
+package erteltest.services;
 
+import erteltest.exceptions.InternalException;
+import erteltest.helpers.CakeConverter;
+import erteltest.models.Cake;
+import erteltest.models.CakeDto;
+import erteltest.models.CakeFilter;
+import erteltest.models.CakeView;
+import erteltest.repositories.CakeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,12 +25,12 @@ public class DefaultCakeService implements CakeService {
 
     @Override
     public CompletableFuture<CakeDto> getItem(Long id) {
-        return cakeRepository.findById(id).thenApply(CakeConverter::cakeToCakeDTO);
+        return cakeRepository.findCakeById(id).thenApply(CakeConverter::cakeToCakeDTO);
     }
 
     @Override
     public CompletableFuture<CakeView> getView(CakeFilter filter) {
-        PageRequest pageRequest = new PageRequest(filter.getPage(), filter.getLimit());
+        QPageRequest pageRequest = new QPageRequest(filter.getPage(), filter.getLimit());
         return cakeRepository.findByNameAndStatusTypeIn(filter.getText(), filter.getStatuses(), pageRequest)
                 .thenApplyAsync(CakeConverter::cakeToCakeDTO)
                 .thenCombineAsync(CompletableFuture.supplyAsync(
@@ -47,7 +54,7 @@ public class DefaultCakeService implements CakeService {
     public CompletableFuture<Void> removeItem(Long id) {
         return CompletableFuture
                 .supplyAsync(() -> id)
-                .thenAccept(cakeRepository::delete);
+                .thenAccept(cakeRepository::deleteById);
     }
 
     @Override
@@ -58,6 +65,6 @@ public class DefaultCakeService implements CakeService {
     @Override
     public CompletableFuture<Boolean> ifExists(Long id) {
         return CompletableFuture
-                .supplyAsync(() -> cakeRepository.exists(id));
+                .supplyAsync(() -> cakeRepository.findById(id).isPresent());
     }
 }

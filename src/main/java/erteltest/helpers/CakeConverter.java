@@ -1,7 +1,10 @@
-package erteltest;
+package erteltest.helpers;
+
+import erteltest.models.Cake;
+import erteltest.models.CakeDto;
+import erteltest.models.StatusType;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
