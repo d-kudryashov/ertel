@@ -1,6 +1,5 @@
 package erteltest.services;
 
-import erteltest.exceptions.InternalException;
 import erteltest.helpers.CakeConverter;
 import erteltest.models.Cake;
 import erteltest.models.CakeDto;
@@ -8,7 +7,7 @@ import erteltest.models.CakeFilter;
 import erteltest.models.CakeView;
 import erteltest.repositories.CakeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +29,7 @@ public class DefaultCakeService implements CakeService {
 
     @Override
     public CompletableFuture<CakeView> getView(CakeFilter filter) {
-        QPageRequest pageRequest = new QPageRequest(filter.getPage(), filter.getLimit());
+        PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getLimit());
         return cakeRepository.findByNameAndStatusTypeIn(filter.getText(), filter.getStatuses(), pageRequest)
                 .thenApplyAsync(CakeConverter::cakeToCakeDTO)
                 .thenCombineAsync(CompletableFuture.supplyAsync(
@@ -42,12 +41,7 @@ public class DefaultCakeService implements CakeService {
     public CompletableFuture<Void> saveItem(Cake item) {
         return CompletableFuture
                 .supplyAsync(() -> item)
-                .thenApplyAsync(cakeRepository::save)
-                .thenAccept(cake -> {
-                    if (cake == null) {
-                        throw new InternalException();
-                    }
-                });
+                .thenAccept(cakeRepository::save);
     }
 
     @Override
